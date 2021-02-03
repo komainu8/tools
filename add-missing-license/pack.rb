@@ -1,3 +1,5 @@
+#!/bin/ruby
+
 require 'rake'
 require 'zip'
 
