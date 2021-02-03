@@ -125,4 +125,15 @@ download_packages.each do |package|
   sh("cp", package, "#{package}.org")
   unzip_success = true
   sh("unzip", "-q", package)
+  sh("unzip", "-q", package) do |success, rc|
+    unzip_success = success
+    unless success
+      sh("rm", package, "#{package}.org")
+      if Dir.exist?(dirname)
+        sh("sudo", "rm", "-rf", dirname)
+      elsif Dir.exist?(File.basename(dirname, "-with-vcruntime"))
+        sh("sudo", "rm", "-rf", File.basename(dirname, "-with-vcruntime"))
+      end
+    end
+  end
 end
