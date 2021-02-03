@@ -137,4 +137,10 @@ download_packages.each do |package|
   end
   next unless unzip_success
   sh("rm", package)
+
+  if Dir.exist?(dirname)
+    Dir.chdir(dirname)
+  elsif Dir.exist?(File.basename(dirname, "-with-vcruntime"))
+    Dir.chdir(File.basename(dirname, "-with-vcruntime"))
+  end
 end
