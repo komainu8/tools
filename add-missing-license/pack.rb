@@ -133,6 +133,8 @@ vcruntime_file_paths = [
 base_url = "http://packages.groonga.org/windows/groonga"
 
 download_packages.each do |package|
+  updated = false
+
   dirname = File.basename(package, ".zip")
 
   download_url = "#{base_url}/#{package}"
@@ -230,4 +232,16 @@ download_packages.each do |package|
     updated = true
   end
 
+  cd("../")
+  if updated
+    if Dir.exist?(dirname)
+      sh("zip", "#{dirname}.zip", "-r", dirname)
+      sh("sudo", "rm", "-rf", dirname)
+    elsif Dir.exist?(File.basename(dirname, "-with-vcruntime"))
+      sh("zip", "#{dirname}.zip", "-r", File.basename(dirname, "-with-vcruntime"))
+      sh("sudo", "rm", "-rf", File.basename(dirname, "-with-vcruntime"))
+    end
+  else
+    sh("rm", "-rf", "./groonga-*")
+  end
 end
