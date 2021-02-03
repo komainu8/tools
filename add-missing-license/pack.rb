@@ -146,4 +146,24 @@ download_packages.each do |package|
   sh("sudo", "chmod", "755", "./share")
   sh("sudo", "chmod", "755", "./share/groonga/html")
 
+  groonga_admin_url = "https://packages.groonga.org/source/groonga-admin/groonga-admin.tar.gz"
+  groonga_admin_archive_name = File.basename(groonga_admin_url)
+  groonga_admin_version = "0.9.6"
+
+  groonga_admin_file_paths.each do |path|
+    next if File.exist?(path)
+
+    cd("./share/groonga/html") do
+      sh("mv", "admin", "admin.old")
+      sh("wget", groonga_admin_url)
+      sh("tar", "-xf", groonga_admin_archive_name)
+      sh("rm", "-rf", groonga_admin_archive_name)
+      sh("mv", "groonga-admin-#{groonga_admin_version}/html", "admin")
+      sh("rm", "-rf", "groonga-admin-#{groonga_admin_version}/source")
+      sh("mv", "groonga-admin-#{groonga_admin_version}", "../groonga-admin")
+      updated = true
+    end
+    break
+  end
+
 end
