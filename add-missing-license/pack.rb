@@ -115,6 +115,13 @@ download_packages = [
   "groonga-10.0.11-x86.zip"
 ]
 
+groonga_admin_file_paths = [
+  "./share/groonga/groonga-admin",
+  "./share/groonga/groonga-admin/LICENSE",
+  "./share/groonga/groonga-admin/README.md",
+]
+
+msgpack_file_paths = [
 base_url = "http://packages.groonga.org/windows/groonga"
 
 download_packages.each do |package|
