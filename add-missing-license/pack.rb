@@ -124,7 +124,6 @@ download_packages.each do |package|
   sh("wget", download_url)
   sh("cp", package, "#{package}.org")
   unzip_success = true
-  sh("unzip", "-q", package)
   sh("unzip", "-q", package) do |success, rc|
     unzip_success = success
     unless success
