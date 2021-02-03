@@ -143,4 +143,7 @@ download_packages.each do |package|
   elsif Dir.exist?(File.basename(dirname, "-with-vcruntime"))
     Dir.chdir(File.basename(dirname, "-with-vcruntime"))
   end
+  sh("sudo", "chmod", "755", "./share")
+  sh("sudo", "chmod", "755", "./share/groonga/html")
+
 end
