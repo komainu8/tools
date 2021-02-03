@@ -122,6 +122,9 @@ groonga_admin_file_paths = [
 ]
 
 msgpack_file_paths = [
+  "./share/groonga/msgpack/NOTICE"
+]
+
 base_url = "http://packages.groonga.org/windows/groonga"
 
 download_packages.each do |package|
@@ -170,6 +173,30 @@ download_packages.each do |package|
       sh("mv", "groonga-admin-#{groonga_admin_version}", "../groonga-admin")
       updated = true
     end
+    break
+  end
+
+  download_msgpack_version = "3.0.1"
+  download_url = "https://github.com/msgpack/msgpack-c/releases/download/cpp-#{download_msgpack_version}/msgpack-#{download_msgpack_version}.tar.gz"
+  msgpack_archive_name = File.basename(download_url)
+  msgpack_dir_name = File.basename(msgpack_archive_name, ".tar.gz")
+  groonga_license_dir = "../share/groonga/msgpack"
+
+  msgpack_file_paths.each do |path|
+    next if File.exist?(path)
+
+    sh("wget", download_url)
+    sh("tar", "-xf", msgpack_archive_name)
+    cd(msgpack_dir_name) do
+      sh("mv", "AUTHORS", groonga_license_dir)
+      sh("mv", "COPYING", groonga_license_dir)
+      sh("mv", "ChangeLog", groonga_license_dir)
+      sh("mv", "LICENSE_1_0.txt", groonga_license_dir)
+      sh("mv", "NOTICE", groonga_license_dir)
+      sh("mv", "README.md", groonga_license_dir)
+      updated = true
+    end
+    sh("rm", "-rf", msgpack_archive_name, msgpack_dir_name)
     break
   end
 
