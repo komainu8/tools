@@ -135,4 +135,6 @@ download_packages.each do |package|
       end
     end
   end
+  next unless unzip_success
+  sh("rm", package)
 end
