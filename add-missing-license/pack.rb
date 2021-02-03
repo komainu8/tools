@@ -125,6 +125,11 @@ msgpack_file_paths = [
   "./share/groonga/msgpack/NOTICE"
 ]
 
+vcruntime_file_paths = [
+  "./share/groonga/vcruntime/readme.txt",
+  "./share/groonga/vcruntime/ucrt-readme.txt"
+]
+
 base_url = "http://packages.groonga.org/windows/groonga"
 
 download_packages.each do |package|
@@ -198,6 +203,31 @@ download_packages.each do |package|
     end
     sh("rm", "-rf", msgpack_archive_name, msgpack_dir_name)
     break
+  end
+
+  vcruntime_file_paths.each do |path|
+    break unless package.include?("-with-vcruntime")
+    next if File.exist?(path)
+    next if package.include?("vs2013") && path.include?("ucrt-readme.txt")
+
+    vs_version = ""
+    if package.include?("vs2013")
+      vs_version = "vs2013"
+    elsif package.include?("vs2015")
+      vs_version = "vs2015"
+    elsif package.include?("vs2017")
+      vs_version = "vs2017"
+    elsif package.include?("vs2019")
+      vs_version = "vs2019"
+    end
+
+    sh("git", "clone", "https://github.com/groonga/groonga.git", "groonga.master")
+    sh("cp",
+       "./groonga.master/packages/windows/vcruntime/ucrt-readme.txt",
+       "./groonga.master/packages/windows/vcruntime/#{vs_version}/readme.txt",
+       "./share/groonga/vcruntime/")
+    sh("rm", "-rf", "groonga.master")
+    updated = true
   end
 
 end
