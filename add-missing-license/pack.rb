@@ -8,6 +8,7 @@ groonga_admin_file_paths = [
   "./share/groonga/groonga-admin/LICENSE",
   "./share/groonga/groonga-admin/README.md",
 ]
+class Packages
 
 msgpack_file_paths = [
   "./share/groonga/msgpack/NOTICE"
@@ -160,3 +161,4 @@ download_packages.each do |package|
     sh("rm", "-rf", "./groonga-*")
   end
 end
+packages = Packages.new()
