@@ -3,120 +3,6 @@
 require 'rake'
 require 'zip'
 
-download_packages = [
-  "groonga-10.0.4-x64-vs2013-with-vcruntime.zip",
-  "groonga-10.0.4-x64-vs2015-with-vcruntime.zip",
-  "groonga-10.0.4-x64-vs2017-with-vcruntime.zip",
-  "groonga-10.0.4-x64-vs2013.zip",
-  "groonga-10.0.4-x64-vs2015.zip",
-  "groonga-10.0.4-x64-vs2017.zip",
-  "groonga-10.0.4-x64.zip",
-
-  "groonga-10.0.4-x86-vs2013-with-vcruntime.zip",
-  "groonga-10.0.4-x86-vs2015-with-vcruntime.zip",
-  "groonga-10.0.4-x86-vs2017-with-vcruntime.zip",
-  "groonga-10.0.4-x86-vs2013.zip",
-  "groonga-10.0.4-x86-vs2015.zip",
-  "groonga-10.0.4-x86-vs2017.zip",
-  "groonga-10.0.4-x86.zip",
-
-  "groonga-10.0.5-x64-vs2015-with-vcruntime.zip",
-  "groonga-10.0.5-x64-vs2017-with-vcruntime.zip",
-  "groonga-10.0.5-x64-vs2019-with-vcruntime.zip",
-  "groonga-10.0.5-x64-vs2015.zip",
-  "groonga-10.0.5-x64-vs2017.zip",
-  "groonga-10.0.5-x64-vs2019.zip",
-  "groonga-10.0.5-x64.zip",
-
-  "groonga-10.0.5-x86-vs2015-with-vcruntime.zip",
-  "groonga-10.0.5-x86-vs2017-with-vcruntime.zip",
-  "groonga-10.0.5-x86-vs2019-with-vcruntime.zip",
-  "groonga-10.0.5-x86-vs2015.zip",
-  "groonga-10.0.5-x86-vs2017.zip",
-  "groonga-10.0.5-x86-vs2019.zip",
-  "groonga-10.0.5-x86.zip",
-
-  "groonga-10.0.6-x64-vs2015-with-vcruntime.zip",
-  "groonga-10.0.6-x64-vs2017-with-vcruntime.zip",
-  "groonga-10.0.6-x64-vs2019-with-vcruntime.zip",
-  "groonga-10.0.6-x64-vs2015.zip",
-  "groonga-10.0.6-x64-vs2017.zip",
-  "groonga-10.0.6-x64-vs2019.zip",
-  "groonga-10.0.6-x64.zip",
-
-  "groonga-10.0.6-x86-vs2015-with-vcruntime.zip",
-  "groonga-10.0.6-x86-vs2017-with-vcruntime.zip",
-  "groonga-10.0.6-x86-vs2019-with-vcruntime.zip",
-  "groonga-10.0.6-x86-vs2015.zip",
-  "groonga-10.0.6-x86-vs2017.zip",
-  "groonga-10.0.6-x86-vs2019.zip",
-  "groonga-10.0.6-x86.zip",
-
-  "groonga-10.0.7-x64-vs2015-with-vcruntime.zip",
-  "groonga-10.0.7-x64-vs2017-with-vcruntime.zip",
-  "groonga-10.0.7-x64-vs2019-with-vcruntime.zip",
-  "groonga-10.0.7-x64-vs2015.zip",
-  "groonga-10.0.7-x64-vs2017.zip",
-  "groonga-10.0.7-x64-vs2019.zip",
-  "groonga-10.0.7-x64.zip",
-
-  "groonga-10.0.7-x86-vs2015-with-vcruntime.zip",
-  "groonga-10.0.7-x86-vs2017-with-vcruntime.zip",
-  "groonga-10.0.7-x86-vs2019-with-vcruntime.zip",
-  "groonga-10.0.7-x86-vs2015.zip",
-  "groonga-10.0.7-x86-vs2017.zip",
-  "groonga-10.0.7-x86-vs2019.zip",
-  "groonga-10.0.7-x86.zip",
-
-  "groonga-10.0.8-x64-vs2017-with-vcruntime.zip",
-  "groonga-10.0.8-x64-vs2019-with-vcruntime.zip",
-  "groonga-10.0.8-x64-vs2017.zip",
-  "groonga-10.0.8-x64-vs2019.zip",
-  "groonga-10.0.8-x64.zip",
-
-  "groonga-10.0.8-x86-vs2017-with-vcruntime.zip",
-  "groonga-10.0.8-x86-vs2019-with-vcruntime.zip",
-  "groonga-10.0.8-x86-vs2017.zip",
-  "groonga-10.0.8-x86-vs2019.zip",
-  "groonga-10.0.8-x86.zip",
-
-  "groonga-10.0.9-x64-vs2017-with-vcruntime.zip",
-  "groonga-10.0.9-x64-vs2019-with-vcruntime.zip",
-  "groonga-10.0.9-x64-vs2017.zip",
-  "groonga-10.0.9-x64-vs2019.zip",
-  "groonga-10.0.9-x64.zip",
-
-  "groonga-10.0.9-x86-vs2017-with-vcruntime.zip",
-  "groonga-10.0.9-x86-vs2019-with-vcruntime.zip",
-  "groonga-10.0.9-x86-vs2017.zip",
-  "groonga-10.0.9-x86-vs2019.zip",
-  "groonga-10.0.9-x86.zip",
-
-  "groonga-10.0.10-x64-vs2017-with-vcruntime.zip",
-  "groonga-10.0.10-x64-vs2019-with-vcruntime.zip",
-  "groonga-10.0.10-x64-vs2017.zip",
-  "groonga-10.0.10-x64-vs2019.zip",
-  "groonga-10.0.10-x64.zip",
-
-  "groonga-10.0.10-x86-vs2017-with-vcruntime.zip",
-  "groonga-10.0.10-x86-vs2019-with-vcruntime.zip",
-  "groonga-10.0.10-x86-vs2017.zip",
-  "groonga-10.0.10-x86-vs2019.zip",
-  "groonga-10.0.10-x86.zip",
-
-  "groonga-10.0.11-x64-vs2017-with-vcruntime.zip",
-  "groonga-10.0.11-x64-vs2019-with-vcruntime.zip",
-  "groonga-10.0.11-x64-vs2017.zip",
-  "groonga-10.0.11-x64-vs2019.zip",
-  "groonga-10.0.11-x64.zip",
-
-  "groonga-10.0.11-x86-vs2017-with-vcruntime.zip",
-  "groonga-10.0.11-x86-vs2019-with-vcruntime.zip",
-  "groonga-10.0.11-x86-vs2017.zip",
-  "groonga-10.0.11-x86-vs2019.zip",
-  "groonga-10.0.11-x86.zip"
-]
-
 groonga_admin_file_paths = [
   "./share/groonga/groonga-admin",
   "./share/groonga/groonga-admin/LICENSE",
@@ -183,6 +69,17 @@ download_packages.each do |package|
       updated = true
     end
     break
+  def target_groonga_versions
+    [
+      "10.0.4",
+      "10.0.5",
+      "10.0.6",
+      "10.0.7",
+      "10.0.8",
+      "10.0.9",
+      "10.1.0",
+      "10.1.1"
+    ]
   end
 
   download_msgpack_version = "3.0.1"
@@ -207,6 +104,11 @@ download_packages.each do |package|
     end
     sh("rm", "-rf", msgpack_archive_name, msgpack_dir_name)
     break
+  def target_architectures
+    [
+      "x86",
+      "x64"
+    ]
   end
 
   vcruntime_file_paths.each do |path|
@@ -232,6 +134,17 @@ download_packages.each do |package|
        "./share/groonga/vcruntime/")
     sh("rm", "-rf", "groonga.master")
     updated = true
+  def support_vs_versions
+    {
+      "10.0.4" => ["vs2013", "vs2015", "vs2017"],
+      "10.0.5" => ["vs2015", "vs2017", "vs2019"],
+      "10.0.6" => ["vs2015", "vs2017", "vs2019"],
+      "10.0.7" => ["vs2015", "vs2017", "vs2019"],
+      "10.0.8" => ["vs2017", "vs2019"],
+      "10.0.9" => ["vs2017", "vs2019"],
+      "10.1.0" => ["vs2017", "vs2019"],
+      "10.1.1" => ["vs2017", "vs2019"]
+    }
   end
 
   cd("../")
