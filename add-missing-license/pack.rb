@@ -156,9 +156,22 @@ download_packages.each do |package|
     elsif Dir.exist?(File.basename(dirname, "-with-vcruntime"))
       sh("zip", "#{dirname}.zip", "-r", File.basename(dirname, "-with-vcruntime"))
       sh("sudo", "rm", "-rf", File.basename(dirname, "-with-vcruntime"))
+  def make_package_names()
+    package_names = []
+    target_groonga_versions.each do |groonga_version|
+      package_name_with_groonga_version = "groonga-#{groonga_version}"
+      target_architectures.each do |architecture|
+        package_name_with_arch = package_name_with_groonga_version + "-#{architecture}"
+        support_vs_versions[groonga_version].each do |support_vs_version|
+          package_names << (package_name_with_arch + "-#{support_vs_version}.zip")
+          package_names << (package_name_with_arch + "-#{support_vs_version}-with-vcruntime.zip")        
+        end
+      end
     end
   else
     sh("rm", "-rf", "./groonga-*")
+    p package_names
   end
 end
 packages = Packages.new()
+packages.make_package_names()
