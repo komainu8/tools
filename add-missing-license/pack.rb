@@ -67,7 +67,6 @@ class Packages
         end
       end
     end
-    p package_names
   end
 end
 
