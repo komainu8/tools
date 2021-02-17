@@ -1,75 +1,10 @@
 #!/bin/ruby
 
-require 'rake'
-require 'zip'
+#require 'rake'
+#require 'zip'
 
-groonga_admin_file_paths = [
-  "./share/groonga/groonga-admin",
-  "./share/groonga/groonga-admin/LICENSE",
-  "./share/groonga/groonga-admin/README.md",
-]
 class Packages
 
-msgpack_file_paths = [
-  "./share/groonga/msgpack/NOTICE"
-]
-
-vcruntime_file_paths = [
-  "./share/groonga/vcruntime/readme.txt",
-  "./share/groonga/vcruntime/ucrt-readme.txt"
-]
-
-base_url = "http://packages.groonga.org/windows/groonga"
-
-download_packages.each do |package|
-  updated = false
-
-  dirname = File.basename(package, ".zip")
-
-  download_url = "#{base_url}/#{package}"
-  sh("wget", download_url)
-  sh("cp", package, "#{package}.org")
-  unzip_success = true
-  sh("unzip", "-q", package) do |success, rc|
-    unzip_success = success
-    unless success
-      sh("rm", package, "#{package}.org")
-      if Dir.exist?(dirname)
-        sh("sudo", "rm", "-rf", dirname)
-      elsif Dir.exist?(File.basename(dirname, "-with-vcruntime"))
-        sh("sudo", "rm", "-rf", File.basename(dirname, "-with-vcruntime"))
-      end
-    end
-  end
-  next unless unzip_success
-  sh("rm", package)
-
-  if Dir.exist?(dirname)
-    Dir.chdir(dirname)
-  elsif Dir.exist?(File.basename(dirname, "-with-vcruntime"))
-    Dir.chdir(File.basename(dirname, "-with-vcruntime"))
-  end
-  sh("sudo", "chmod", "755", "./share")
-  sh("sudo", "chmod", "755", "./share/groonga/html")
-
-  groonga_admin_url = "https://packages.groonga.org/source/groonga-admin/groonga-admin.tar.gz"
-  groonga_admin_archive_name = File.basename(groonga_admin_url)
-  groonga_admin_version = "0.9.6"
-
-  groonga_admin_file_paths.each do |path|
-    next if File.exist?(path)
-
-    cd("./share/groonga/html") do
-      sh("mv", "admin", "admin.old")
-      sh("wget", groonga_admin_url)
-      sh("tar", "-xf", groonga_admin_archive_name)
-      sh("rm", "-rf", groonga_admin_archive_name)
-      sh("mv", "groonga-admin-#{groonga_admin_version}/html", "admin")
-      sh("rm", "-rf", "groonga-admin-#{groonga_admin_version}/source")
-      sh("mv", "groonga-admin-#{groonga_admin_version}", "../groonga-admin")
-      updated = true
-    end
-    break
   def target_groonga_versions
     [
       "10.0.4",
@@ -83,28 +18,6 @@ download_packages.each do |package|
     ]
   end
 
-  download_msgpack_version = "3.0.1"
-  download_url = "https://github.com/msgpack/msgpack-c/releases/download/cpp-#{download_msgpack_version}/msgpack-#{download_msgpack_version}.tar.gz"
-  msgpack_archive_name = File.basename(download_url)
-  msgpack_dir_name = File.basename(msgpack_archive_name, ".tar.gz")
-  groonga_license_dir = "../share/groonga/msgpack"
-
-  msgpack_file_paths.each do |path|
-    next if File.exist?(path)
-
-    sh("wget", download_url)
-    sh("tar", "-xf", msgpack_archive_name)
-    cd(msgpack_dir_name) do
-      sh("mv", "AUTHORS", groonga_license_dir)
-      sh("mv", "COPYING", groonga_license_dir)
-      sh("mv", "ChangeLog", groonga_license_dir)
-      sh("mv", "LICENSE_1_0.txt", groonga_license_dir)
-      sh("mv", "NOTICE", groonga_license_dir)
-      sh("mv", "README.md", groonga_license_dir)
-      updated = true
-    end
-    sh("rm", "-rf", msgpack_archive_name, msgpack_dir_name)
-    break
   def target_architectures
     [
       "x86",
@@ -112,29 +25,6 @@ download_packages.each do |package|
     ]
   end
 
-  vcruntime_file_paths.each do |path|
-    break unless package.include?("-with-vcruntime")
-    next if File.exist?(path)
-    next if package.include?("vs2013") && path.include?("ucrt-readme.txt")
-
-    vs_version = ""
-    if package.include?("vs2013")
-      vs_version = "vs2013"
-    elsif package.include?("vs2015")
-      vs_version = "vs2015"
-    elsif package.include?("vs2017")
-      vs_version = "vs2017"
-    elsif package.include?("vs2019")
-      vs_version = "vs2019"
-    end
-
-    sh("git", "clone", "https://github.com/groonga/groonga.git", "groonga.master")
-    sh("cp",
-       "./groonga.master/packages/windows/vcruntime/ucrt-readme.txt",
-       "./groonga.master/packages/windows/vcruntime/#{vs_version}/readme.txt",
-       "./share/groonga/vcruntime/")
-    sh("rm", "-rf", "groonga.master")
-    updated = true
   def support_vs_versions
     {
       "10.0.4" => ["vs2013", "vs2015", "vs2017"],
@@ -148,14 +38,23 @@ download_packages.each do |package|
     }
   end
 
-  cd("../")
-  if updated
-    if Dir.exist?(dirname)
-      sh("zip", "#{dirname}.zip", "-r", dirname)
-      sh("sudo", "rm", "-rf", dirname)
-    elsif Dir.exist?(File.basename(dirname, "-with-vcruntime"))
-      sh("zip", "#{dirname}.zip", "-r", File.basename(dirname, "-with-vcruntime"))
-      sh("sudo", "rm", "-rf", File.basename(dirname, "-with-vcruntime"))
+  #groonga_admin_file_paths = [
+  #  "./share/groonga/groonga-admin",
+  #  "./share/groonga/groonga-admin/LICENSE",
+  #  "./share/groonga/groonga-admin/README.md",
+  #]
+  #
+  #msgpack_file_paths = [
+  #  "./share/groonga/msgpack/NOTICE"
+  #]
+  #
+  #vcruntime_file_paths = [
+  #  "./share/groonga/vcruntime/readme.txt",
+  #  "./share/groonga/vcruntime/ucrt-readme.txt"
+  #]
+  #
+  #base_url = "http://packages.groonga.org/windows/groonga"
+
   def make_package_names()
     package_names = []
     target_groonga_versions.each do |groonga_version|
@@ -168,10 +67,123 @@ download_packages.each do |package|
         end
       end
     end
-  else
-    sh("rm", "-rf", "./groonga-*")
     p package_names
   end
 end
+
 packages = Packages.new()
 packages.make_package_names()
+
+#download_packages.each do |package|
+#  updated = false
+#
+#  dirname = File.basename(package, ".zip")
+#
+#  download_url = "#{base_url}/#{package}"
+#  sh("wget", download_url)
+#  sh("cp", package, "#{package}.org")
+#  unzip_success = true
+#  sh("unzip", "-q", package) do |success, rc|
+#    unzip_success = success
+#    unless success
+#      sh("rm", package, "#{package}.org")
+#      if Dir.exist?(dirname)
+#        sh("sudo", "rm", "-rf", dirname)
+#      elsif Dir.exist?(File.basename(dirname, "-with-vcruntime"))
+#        sh("sudo", "rm", "-rf", File.basename(dirname, "-with-vcruntime"))
+#      end
+#    end
+#  end
+#  next unless unzip_success
+#  sh("rm", package)
+#
+#  if Dir.exist?(dirname)
+#    Dir.chdir(dirname)
+#  elsif Dir.exist?(File.basename(dirname, "-with-vcruntime"))
+#    Dir.chdir(File.basename(dirname, "-with-vcruntime"))
+#  end
+#  sh("sudo", "chmod", "755", "./share")
+#  sh("sudo", "chmod", "755", "./share/groonga/html")
+#
+#  groonga_admin_url = "https://packages.groonga.org/source/groonga-admin/groonga-admin.tar.gz"
+#  groonga_admin_archive_name = File.basename(groonga_admin_url)
+#  groonga_admin_version = "0.9.6"
+#
+#  groonga_admin_file_paths.each do |path|
+#    next if File.exist?(path)
+#
+#    cd("./share/groonga/html") do
+#      sh("mv", "admin", "admin.old")
+#      sh("wget", groonga_admin_url)
+#      sh("tar", "-xf", groonga_admin_archive_name)
+#      sh("rm", "-rf", groonga_admin_archive_name)
+#      sh("mv", "groonga-admin-#{groonga_admin_version}/html", "admin")
+#      sh("rm", "-rf", "groonga-admin-#{groonga_admin_version}/source")
+#      sh("mv", "groonga-admin-#{groonga_admin_version}", "../groonga-admin")
+#      updated = true
+#    end
+#    break
+#  end
+#
+#  download_msgpack_version = "3.0.1"
+#  download_url = "https://github.com/msgpack/msgpack-c/releases/download/cpp-#{download_msgpack_version}/msgpack-#{download_msgpack_version}.tar.gz"
+#  msgpack_archive_name = File.basename(download_url)
+#  msgpack_dir_name = File.basename(msgpack_archive_name, ".tar.gz")
+#  groonga_license_dir = "../share/groonga/msgpack"
+#
+#  msgpack_file_paths.each do |path|
+#    next if File.exist?(path)
+#
+#    sh("wget", download_url)
+#    sh("tar", "-xf", msgpack_archive_name)
+#    cd(msgpack_dir_name) do
+#      sh("mv", "AUTHORS", groonga_license_dir)
+#      sh("mv", "COPYING", groonga_license_dir)
+#      sh("mv", "ChangeLog", groonga_license_dir)
+#      sh("mv", "LICENSE_1_0.txt", groonga_license_dir)
+#      sh("mv", "NOTICE", groonga_license_dir)
+#      sh("mv", "README.md", groonga_license_dir)
+#      updated = true
+#    end
+#    sh("rm", "-rf", msgpack_archive_name, msgpack_dir_name)
+#    break
+#  end
+#
+#  vcruntime_file_paths.each do |path|
+#    break unless package.include?("-with-vcruntime")
+#    next if File.exist?(path)
+#    next if package.include?("vs2013") && path.include?("ucrt-readme.txt")
+#
+#    vs_version = ""
+#    if package.include?("vs2013")
+#      vs_version = "vs2013"
+#    elsif package.include?("vs2015")
+#      vs_version = "vs2015"
+#    elsif package.include?("vs2017")
+#      vs_version = "vs2017"
+#    elsif package.include?("vs2019")
+#      vs_version = "vs2019"
+#    end
+#
+#    sh("git", "clone", "https://github.com/groonga/groonga.git", "groonga.master")
+#    sh("cp",
+#       "./groonga.master/packages/windows/vcruntime/ucrt-readme.txt",
+#       "./groonga.master/packages/windows/vcruntime/#{vs_version}/readme.txt",
+#       "./share/groonga/vcruntime/")
+#    sh("rm", "-rf", "groonga.master")
+#    updated = true
+#  end
+#
+#  cd("../")
+#  if updated
+#    if Dir.exist?(dirname)
+#      sh("zip", "#{dirname}.zip", "-r", dirname)
+#      sh("sudo", "rm", "-rf", dirname)
+#    elsif Dir.exist?(File.basename(dirname, "-with-vcruntime"))
+#      sh("zip", "#{dirname}.zip", "-r", File.basename(dirname, "-with-vcruntime"))
+#      sh("sudo", "rm", "-rf", File.basename(dirname, "-with-vcruntime"))
+#    end
+#  else
+#    sh("rm", "-rf", "./groonga-*")
+#  end
+#end
