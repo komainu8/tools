@@ -92,6 +92,10 @@ end
 packages = Packages.new()
 packages.download()
 
+packages.get_names().each do |name|
+  system("unzip #{name}")
+end
+
 #download_packages.each do |package|
 #  updated = false
 #
