@@ -10,6 +10,7 @@ class Packages
 
   def download
     @names.each do |name|
+      next if File.file?(name)
       system("wget #{base_url}/#{name}")
     end
   end
