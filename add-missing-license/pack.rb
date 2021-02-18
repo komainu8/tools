@@ -54,11 +54,11 @@ class Packages
   #
   #base_url = "http://packages.groonga.org/windows/groonga"
 
-  def make_package_names()
   def base_url
     "http://packages.groonga.org/windows/groonga"
   end
 
+  def make_package_names
     package_names = []
     target_groonga_versions.each do |groonga_version|
       package_name_with_groonga_version = "groonga-#{groonga_version}"
@@ -70,6 +70,7 @@ class Packages
         end
       end
     end
+    package_names
   end
 end
 
