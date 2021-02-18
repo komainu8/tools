@@ -94,6 +94,7 @@ packages.download()
 
 packages.get_names().each do |name|
   system("unzip #{name}")
+  system("mv #{name} #{name}.old")
 end
 
 #download_packages.each do |package|
