@@ -9,7 +9,7 @@ class Packages
   end
 
   def download
-    make_package_names.each do |name|
+    @names.each do |name|
       system("wget #{base_url}/#{name}")
     end
   end
