@@ -4,6 +4,7 @@
 
 class Packages
 
+  private
   def target_groonga_versions
     [
       "10.0.4",
