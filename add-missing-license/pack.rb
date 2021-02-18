@@ -4,6 +4,10 @@
 
 class Packages
 
+  def initialize
+    @names = make_package_names
+  end
+
   def download
     make_package_names.each do |name|
       system("wget #{base_url}/#{name}")
