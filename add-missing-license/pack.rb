@@ -14,6 +14,10 @@ class Packages
     end
   end
 
+  def get_names
+    @names
+  end
+
   private
   def target_groonga_versions
     [
