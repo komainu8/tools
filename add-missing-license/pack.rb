@@ -4,6 +4,12 @@
 
 class Packages
 
+  def download
+    make_package_names.each do |name|
+      system("wget #{base_url}/#{name}")
+    end
+  end
+
   private
   def target_groonga_versions
     [
@@ -76,7 +82,7 @@ class Packages
 end
 
 packages = Packages.new()
-packages.make_package_names()
+packages.download()
 
 #download_packages.each do |package|
 #  updated = false
