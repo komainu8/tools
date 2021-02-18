@@ -1,6 +1,5 @@
 #!/bin/ruby
 
-#require 'rake'
 #require 'zip'
 
 class Packages
