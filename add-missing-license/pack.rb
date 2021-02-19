@@ -114,6 +114,19 @@ class Package
     ]
   end
 
+  def groonga_admin_url
+    "https://packages.groonga.org/source/groonga-admin/groonga-admin.tar.gz"
+  end
+
+  def groonga_admin_archive_name
+    File.basename(groonga_admin_url)
+  end
+
+  def groonga_admin_version
+    "0.9.6"
+  end
+
+  def groonga_admin_basename
 end
 
 packages = Packages.new()
