@@ -173,6 +173,9 @@ packages.get_names().each do |name|
   package = Package.new(name)
 
   package.uncompress()
+  Dir.chdir(package.get_path()) do
+    package.check_bundled()
+  end
   system("mv #{name} #{name}.old")
 end
 
