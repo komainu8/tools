@@ -127,6 +127,9 @@ class Package
   end
 
   def groonga_admin_basename
+    File.basename(groonga_admin_archive_name, ".tar.gz")
+  end
+
 end
 
 packages = Packages.new()
