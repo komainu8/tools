@@ -112,6 +112,14 @@ class Package
     File.basename(@name, ".zip")
   end
 
+  def groonga_admin_paths
+    [
+      "share/groonga/groonga-admin",
+      "share/groonga/groonga-admin/LICENSE",
+      "share/groonga/groonga-admin/README.md"
+    ]
+  end
+
 end
 
 packages = Packages.new()
