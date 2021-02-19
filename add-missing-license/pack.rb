@@ -107,6 +107,11 @@ class Package
     basename
   end
 
+  private
+  def basename
+    File.basename(@name, ".zip")
+  end
+
 end
 
 packages = Packages.new()
