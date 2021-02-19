@@ -142,6 +142,13 @@ class Package
     "share/groonga/html"
   end
 
+  def check_groonga_admin
+    groonga_admin_paths.each do |path|
+      next if File.exist?(path)
+
+      bundle_groonga_admin
+    end
+  end
 end
 
 packages = Packages.new()
