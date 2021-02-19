@@ -130,6 +130,10 @@ class Package
     File.basename(groonga_admin_archive_name, ".tar.gz")
   end
 
+  def download_groonga_admin
+    system("wget #{groonga_admin_url}")
+  end
+
 end
 
 packages = Packages.new()
