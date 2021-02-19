@@ -67,8 +67,6 @@ class Packages
   #  "./share/groonga/vcruntime/readme.txt",
   #  "./share/groonga/vcruntime/ucrt-readme.txt"
   #]
-  #
-  #base_url = "http://packages.groonga.org/windows/groonga"
 
   def base_url
     "http://packages.groonga.org/windows/groonga"
