@@ -88,11 +88,20 @@ class Packages
   end
 end
 
+class Package
+  def initialize(name)
+    @name = name
+  end
+
+end
+
 packages = Packages.new()
 packages.download()
 
 packages.get_names().each do |name|
   system("unzip #{name}")
+  package = Package.new(name)
+
   system("mv #{name} #{name}.old")
 end
 
