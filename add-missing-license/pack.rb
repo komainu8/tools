@@ -106,6 +106,7 @@ packages.download()
 packages.get_names().each do |name|
   package = Package.new(name)
 
+  package.uncompress()
   system("mv #{name} #{name}.old")
 end
 
