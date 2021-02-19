@@ -93,13 +93,17 @@ class Package
     @name = name
   end
 
+  def uncompress
+    system("unzip #{@name}")
+  end
+
+  def get_path
 end
 
 packages = Packages.new()
 packages.download()
 
 packages.get_names().each do |name|
-  system("unzip #{name}")
   package = Package.new(name)
 
   system("mv #{name} #{name}.old")
