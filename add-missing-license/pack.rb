@@ -142,6 +142,21 @@ class Package
     "share/groonga/html"
   end
 
+  def bundle_groonga_admin
+    unless File.exist?(groonga_admin_archive_name)
+      download_groonga_admin
+    end
+
+    Dir.chdir(groonga_admin_bundle_directory) do
+      system("tar -zxf #{groonga_admin_archive_name}")
+      FileUtils.mv("admin", "admin.old")
+      FileUtils.mv("#{groonga_admin_basename}/html", "admin")
+      FileUtils.rm_r("#{groonga_admin_basename}/source")
+      FileUtils.mv("#{groonga_admin_basename}", "../groonga-admin")
+      FileUtils.rm(groonga_admin_archive_name)
+    end
+  end
+
   def check_groonga_admin
     groonga_admin_paths.each do |path|
       next if File.exist?(path)
