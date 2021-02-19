@@ -106,6 +106,10 @@ class Package
     File.basename(@name, ".zip")
   end
 
+  def target_directories
+    ["bin", "etc", "include", "lib", "share"]
+  end
+
   def groonga_admin_paths
     [
       "share/groonga/groonga-admin",
