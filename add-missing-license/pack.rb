@@ -134,6 +134,10 @@ class Package
     system("wget #{groonga_admin_url}")
   end
 
+  def groonga_admin_bundle_directory
+    "share/groonga/html"
+  end
+
 end
 
 packages = Packages.new()
