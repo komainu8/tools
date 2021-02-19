@@ -54,12 +54,6 @@ class Packages
     }
   end
 
-  #groonga_admin_file_paths = [
-  #  "./share/groonga/groonga-admin",
-  #  "./share/groonga/groonga-admin/LICENSE",
-  #  "./share/groonga/groonga-admin/README.md",
-  #]
-  #
   #msgpack_file_paths = [
   #  "./share/groonga/msgpack/NOTICE"
   #]
