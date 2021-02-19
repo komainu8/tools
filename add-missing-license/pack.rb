@@ -1,5 +1,6 @@
 #!/bin/ruby
 
+require 'fileutils'
 #require 'zip'
 
 class Packages
@@ -98,6 +99,14 @@ class Package
   end
 
   def get_path
+    return basename if Dir.exist?(basename)
+
+    Dir.mkdir(basename, 0755)
+    FileUtils.mv(target_directories, basename)
+
+    basename
+  end
+
 end
 
 packages = Packages.new()
